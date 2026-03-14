@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Resume, ExperienceEntry } from '../../../lib/types'
-import { improveDescription } from '../../../lib/gemini'
+import { improveDescription } from '../../../lib/groq'
 import Button from '../../ui/Button'
 import Icon   from '../../ui/Icon'
 

@@ -1,29 +1,29 @@
-// ─── API CALL ─────────────────────────────────────────────────────────────────
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY
+const API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
-
-async function callGemini(prompt: string): Promise<string> {
+async function callGroq(prompt: string): Promise<string> {
   const res = await fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${API_KEY}`,
+    },
     body: JSON.stringify({
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
-      generationConfig: {
-        temperature:     0.7,
-        maxOutputTokens: 1000,
-      },
+      model:       'llama-3.3-70b-versatile',
+      messages:    [{ role: 'user', content: prompt }],
+      max_tokens:  1000,
+      temperature: 0.7,
     }),
   })
 
-  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`)
+  if (!res.ok) {
+    const errBody = await res.json()
+    console.error('Groq error:', errBody)
+    throw new Error(`Groq API error: ${res.status}`)
+  }
 
   const data = await res.json()
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+  return data.choices?.[0]?.message?.content ?? ''
 }
 
 // ─── AI FEATURES ─────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ The person is a ${title || 'professional'} ${skillList}.
 Make it confident, specific, and achievement-oriented.
 Return only the summary text, no labels or preamble.`
 
-  return callGemini(prompt)
+  return callGroq(prompt)
 }
 
 export async function improveDescription(role: string, company: string, description: string): Promise<string> {
@@ -48,7 +48,7 @@ Current description: ${description}
 
 Return only the improved description, no labels or preamble.`
 
-  return callGemini(prompt)
+  return callGroq(prompt)
 }
 
 export async function suggestSkills(title: string): Promise<string[]> {
@@ -56,7 +56,7 @@ export async function suggestSkills(title: string): Promise<string[]> {
 Return ONLY a JSON array of skill strings like ["React","Node.js"].
 No explanation, no markdown, no backticks.`
 
-  const raw = await callGemini(prompt)
+  const raw = await callGroq(prompt)
   const clean = raw.replace(/```json|```/g, '').trim()
   try {
     const parsed = JSON.parse(clean)

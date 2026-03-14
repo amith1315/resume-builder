@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Resume, ToastData } from '../../../lib/types'
-import { generateSummary } from '../../../lib/gemini'
+import { generateSummary } from '../../../lib/groq'
 import Button from '../../ui/Button'
 import Toast  from '../../ui/Toast'
 import Icon   from '../../ui/Icon'

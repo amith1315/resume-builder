@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Resume } from '../../../lib/types'
-import { suggestSkills } from '../../../lib/gemini'
+import { suggestSkills } from '../../../lib/groq'
 import Button from '../../ui/Button'
 import Icon   from '../../ui/Icon'
 
