@@ -32,7 +32,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             className={inputCls}
             value={resume.name}
             onChange={e => upd('name', e.target.value)}
-            placeholder="Jane Smith"
+            placeholder="Amith Sahani"
           />
         </Field>
         <Field label="Professional Title">
@@ -52,7 +52,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             type="email"
             value={resume.email}
             onChange={e => upd('email', e.target.value)}
-            placeholder="jane@example.com"
+            placeholder="amith@example.com"
           />
         </Field>
         <Field label="Phone">
@@ -60,7 +60,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             className={inputCls}
             value={resume.phone}
             onChange={e => upd('phone', e.target.value)}
-            placeholder="+1 (555) 000-0000"
+            placeholder="+91 9192019283"
           />
         </Field>
       </div>
@@ -71,7 +71,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             className={inputCls}
             value={resume.location}
             onChange={e => upd('location', e.target.value)}
-            placeholder="San Francisco, CA"
+            placeholder="Bangalore, India"
           />
         </Field>
         <Field label="LinkedIn">
@@ -79,7 +79,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             className={inputCls}
             value={resume.linkedin}
             onChange={e => upd('linkedin', e.target.value)}
-            placeholder="linkedin.com/in/janesmith"
+            placeholder="linkedin.com/in/amith"
           />
         </Field>
       </div>
@@ -90,7 +90,7 @@ export default function PersonalInfo({ resume, onChange }: Props) {
             className={inputCls}
             value={resume.website}
             onChange={e => upd('website', e.target.value)}
-            placeholder="janesmith.dev"
+            placeholder="amithsahani.dev"
           />
         </Field>
       </div>

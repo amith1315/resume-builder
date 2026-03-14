@@ -1,7 +1,5 @@
-// ─── TEMPLATES ───────────────────────────────────────────────────────────────
-
+// TEMPLATES 
 export type TemplateTier = 'free' | 'paid'
-
 export interface Template {
   id: string
   name: string
@@ -13,8 +11,7 @@ export interface Template {
   sections: string[]
 }
 
-// ─── RESUME SECTIONS ─────────────────────────────────────────────────────────
-
+// RESUME SECTIONS
 export interface ExperienceEntry {
   id: string
   company: string
@@ -49,7 +46,7 @@ export interface CertificationEntry {
   year: string
 }
 
-// ─── RESUME ──────────────────────────────────────────────────────────────────
+// RESUME 
 
 export interface Resume {
   id: string
@@ -72,7 +69,7 @@ export interface Resume {
   updatedAt: string
 }
 
-// ─── UI ──────────────────────────────────────────────────────────────────────
+// UI 
 
 export type ToastType = 'success' | 'error'
 

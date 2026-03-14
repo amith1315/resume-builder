@@ -8,7 +8,7 @@ type View =
 
 export default function App() {
   const [view, setView] = useState<View>(() => {
-    // On refresh, check URL hash for resumeId
+    //On refresh, check URL hash for resumeId
     const hash = window.location.hash
     if (hash.startsWith('#/editor/')) {
       const resumeId = hash.replace('#/editor/', '')
@@ -17,7 +17,7 @@ export default function App() {
     return { screen: 'dashboard' }
   })
 
-  // Keep URL in sync with view state
+  //Keep URL in sync with view state
   useEffect(() => {
     if (view.screen === 'editor') {
       window.location.hash = `/editor/${view.resumeId}`

@@ -45,7 +45,7 @@ export default function UpgradeModal({ onUpgrade, onClose }: Props) {
 
       {/* Price */}
       <div className="mb-6">
-        <span className="text-3xl font-bold">$9.99</span>
+        <span className="text-3xl font-bold">₹99</span>
         <span className="text-sm text-[var(--text3)] ml-2">/ one-time</span>
       </div>
 
