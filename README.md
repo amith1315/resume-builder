@@ -31,13 +31,13 @@ A full-stack resume builder web app with AI-powered content generation, live pre
 - Premium template unlocked via simulated one-time upgrade ($9.99)
 
 ### AI Assistance (Groq API — LLaMA 3.3 70B)
-- **Generate Summary** — writes a 3-sentence professional summary based on your role and skills
-- **Improve Experience** — rewrites job descriptions with stronger action verbs and impact framing
-- **Suggest Skills** — returns 10 relevant skills as clickable chips based on your job title
+- **Generate Summary** - writes a 3 sentence professional summary based on your role and skills
+- **Improve Experience** - rewrites job descriptions with stronger action verbs and impact framing
+- **Suggest Skills** - returns 10 relevant skills as clickable chips based on your job title
 - All AI suggestions shown inline with "Use This" / "Dismiss" — nothing overwrites without confirmation
 
 ### PDF Export
-- Uses `html2pdf.js` for pixel-perfect WYSIWYG output
+- Uses `html2pdf.js` for pixel perfect WYSIWYG output
 - What you see in the live preview is exactly what you get in the PDF
 - High resolution (2x scale), A4 format, color-accurate
 
@@ -158,12 +158,10 @@ Open [http://localhost:5173](http://localhost:5173)
 - **Docs:** [console.groq.com/docs](https://console.groq.com/docs)
 - Get your free API key at [console.groq.com](https://console.groq.com)
 
-> ⚠️ In production, route AI calls through your own backend (`/api/ai`) to keep your API key server-side and out of the browser.
 
 ### Supabase
 - **Used for:** Storing and retrieving resume data per anonymous user
 - **Table:** `resumes` — stores full resume JSON with `user_id`, `created_at`, `updated_at`
-- **Docs:** [supabase.com/docs](https://supabase.com/docs)
 - Anonymous user IDs are generated on first visit and persisted in localStorage (`rb_uid`)
 
 ---
@@ -191,8 +189,6 @@ vercel --prod
 
 ## 📌 Assumptions Made
 
-1. **No real auth** — users are identified by an anonymous ID stored in localStorage. For production, replace with Supabase Auth.
-2. **No real payment** — the Premium upgrade is simulated. For production, integrate Stripe.
-3. **AI calls are client-side** — for production, proxy through a backend route to protect the API key.
-4. **Skill proficiency bars** (Prism template) — decoratively randomized per skill index since the form doesn't capture proficiency levels.
-5. **localStorage as cache** — acts as a fast offline fallback when Supabase is unavailable.
+1. **No real auth** — users are identified by an anonymous ID stored in localStorage.
+2. **No real payment** — the Premium upgrade is simulated.
+3. **localStorage as cache** — acts as a fast offline fallback when Supabase is unavailable.
