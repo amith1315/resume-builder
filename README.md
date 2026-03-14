@@ -2,7 +2,7 @@
 
 A full-stack resume builder web app with AI-powered content generation, live preview, multiple templates, and one-click PDF export.
 
-![React](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind](https://img.shields.io/badge/Tailwind-4-teal) ![Supabase](https://img.shields.io/badge/Supabase-Database-green)
+![React](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Tailwind](https://img.shields.io/badge/Tailwind-4-teal) ![Supabase](https://img.shields.io/badge/Supabase-Database-green) ![Groq](https://img.shields.io/badge/Groq-AI-orange)
 
 ---
 
@@ -30,7 +30,7 @@ A full-stack resume builder web app with AI-powered content generation, live pre
 - Free templates available immediately
 - Premium template unlocked via simulated one-time upgrade ($9.99)
 
-### AI Assistance (Claude API)
+### AI Assistance (Groq API — LLaMA 3.3 70B)
 - **Generate Summary** — writes a 3-sentence professional summary based on your role and skills
 - **Improve Experience** — rewrites job descriptions with stronger action verbs and impact framing
 - **Suggest Skills** — returns 10 relevant skills as clickable chips based on your job title
@@ -51,7 +51,7 @@ A full-stack resume builder web app with AI-powered content generation, live pre
 | Build Tool | Vite 7 |
 | Styling | Tailwind CSS v4 |
 | Database | Supabase (PostgreSQL) |
-| AI | Anthropic Claude API (`claude-sonnet-4-20250514`) |
+| AI | Groq API (`llama-3.3-70b-versatile`) |
 | PDF Export | html2pdf.js (html2canvas + jsPDF) |
 | Fonts | DM Sans, Playfair Display (Google Fonts) |
 | Deployment | Vercel |
@@ -70,7 +70,7 @@ src/
 ├── lib/
 │   ├── types.ts                   # All TypeScript interfaces
 │   ├── db.ts                      # Supabase DB + localStorage cache
-│   ├── claude.ts                  # AI feature functions
+│   ├── groq.ts                    # AI feature functions (Groq API)
 │   ├── pdf.ts                     # html2pdf download helper
 │   └── supabase.ts                # Supabase client
 │
@@ -97,7 +97,7 @@ src/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/amith1315/resume-builder.git
+git clone https://github.com/YOUR_USERNAME/resume-builder.git
 cd resume-builder
 ```
 
@@ -126,15 +126,20 @@ alter table resumes disable row level security;
 
 3. Go to **Project Settings → API** and copy your Project URL and anon key
 
-### 4. Configure environment variables
+### 4. Get a Groq API key
+1. Go to [console.groq.com](https://console.groq.com) and sign up for free
+2. Go to **API Keys → Create API Key**
+3. Copy the key
+
+### 5. Configure environment variables
 Create a `.env` file in the project root:
 ```
-VITE_ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx
+VITE_GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxx
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key_here
 ```
 
-### 5. Run the development server
+### 6. Run the development server
 ```bash
 npm run dev
 ```
@@ -145,14 +150,15 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ## 🔑 API Information
 
-### Anthropic Claude API
-- **Endpoint:** `https://api.anthropic.com/v1/messages`
-- **Model:** `claude-sonnet-4-20250514`
+### Groq API
+- **Endpoint:** `https://api.groq.com/openai/v1/chat/completions`
+- **Model:** `llama-3.3-70b-versatile`
 - **Used for:** Summary generation, experience improvement, skill suggestions
-- **Docs:** [docs.anthropic.com](https://docs.anthropic.com)
-- Get your API key at [console.anthropic.com](https://console.anthropic.com)
+- **Free tier:** 14,400 requests/day, 6,000 tokens/min
+- **Docs:** [console.groq.com/docs](https://console.groq.com/docs)
+- Get your free API key at [console.groq.com](https://console.groq.com)
 
-> ⚠️ In production, route AI calls through your own backend (`/api/claude`) to keep your API key server-side and out of the browser.
+> ⚠️ In production, route AI calls through your own backend (`/api/ai`) to keep your API key server-side and out of the browser.
 
 ### Supabase
 - **Used for:** Storing and retrieving resume data per anonymous user
@@ -171,15 +177,22 @@ vercel --prod
 
 Add environment variables in **Vercel → Project → Settings → Environment Variables**:
 ```
-VITE_ANTHROPIC_API_KEY
+VITE_GROQ_API_KEY
 VITE_SUPABASE_URL
 VITE_SUPABASE_ANON_KEY
+```
+
+Redeploy after adding env vars:
+```bash
+vercel --prod
 ```
 
 ---
 
 ## 📌 Assumptions Made
 
-1. **No real auth** — users are identified by an anonymous ID stored in localStorage.
-2. **No real payments** — the Premium upgrade is simulated.
-3. **localStorage as cache** — acts as a fast offline fallback when Supabase is unavailable.
+1. **No real auth** — users are identified by an anonymous ID stored in localStorage. For production, replace with Supabase Auth.
+2. **No real payment** — the Premium upgrade is simulated. For production, integrate Stripe.
+3. **AI calls are client-side** — for production, proxy through a backend route to protect the API key.
+4. **Skill proficiency bars** (Prism template) — decoratively randomized per skill index since the form doesn't capture proficiency levels.
+5. **localStorage as cache** — acts as a fast offline fallback when Supabase is unavailable.
