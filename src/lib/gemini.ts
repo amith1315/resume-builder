@@ -1,39 +1,41 @@
 // ─── API CALL ─────────────────────────────────────────────────────────────────
-// In production: route through your own backend (e.g. /api/claude)
-// to keep your API key server-side
 
-async function callClaude(prompt: string): Promise<string> {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
+
+async function callGemini(prompt: string): Promise<string> {
+  const res = await fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json',
-                'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
+      contents: [
+        {
+          parts: [{ text: prompt }],
+        },
+      ],
+      generationConfig: {
+        temperature:     0.7,
+        maxOutputTokens: 1000,
+      },
     }),
   })
 
-  if (!res.ok) throw new Error(`API error: ${res.status}`)
+  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`)
 
   const data = await res.json()
-  return data.content
-    ?.map((b: { type: string; text?: string }) => b.text ?? '')
-    .join('') ?? ''
+  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 }
 
 // ─── AI FEATURES ─────────────────────────────────────────────────────────────
 
 export async function generateSummary(title: string, skills: string[]): Promise<string> {
   const skillList = skills.length ? `with skills in ${skills.join(', ')}` : ''
-  const prompt = `Write a compelling 3-sentence professional summary for a resume. 
-The person is a ${title || 'professional'} ${skillList}. 
-Make it confident, specific, and achievement-oriented. 
+  const prompt = `Write a compelling 3-sentence professional summary for a resume.
+The person is a ${title || 'professional'} ${skillList}.
+Make it confident, specific, and achievement-oriented.
 Return only the summary text, no labels or preamble.`
 
-  return callClaude(prompt)
+  return callGemini(prompt)
 }
 
 export async function improveDescription(role: string, company: string, description: string): Promise<string> {
@@ -46,16 +48,20 @@ Current description: ${description}
 
 Return only the improved description, no labels or preamble.`
 
-  return callClaude(prompt)
+  return callGemini(prompt)
 }
 
 export async function suggestSkills(title: string): Promise<string[]> {
   const prompt = `Suggest 10 relevant professional skills for a ${title || 'professional'}.
-Return ONLY a JSON array of skill strings like ["React","Node.js"]. 
+Return ONLY a JSON array of skill strings like ["React","Node.js"].
 No explanation, no markdown, no backticks.`
 
-  const raw = await callClaude(prompt)
+  const raw = await callGemini(prompt)
   const clean = raw.replace(/```json|```/g, '').trim()
-  const parsed = JSON.parse(clean)
-  return Array.isArray(parsed) ? parsed : []
+  try {
+    const parsed = JSON.parse(clean)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
