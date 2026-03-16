@@ -64,8 +64,8 @@ A full-stack resume builder web app with AI-powered content generation, live pre
 src/
 ├── main.tsx
 ├── App.tsx                        # Routing via URL hash
-├── index.css                      # Tailwind v4 + @theme config
-├── vite-env.d.ts                  # Vite env type declarations
+├── index.css                      # Tailwind v4 
+├── vite-env.d.ts                  
 │
 ├── lib/
 │   ├── types.ts                   # All TypeScript interfaces
@@ -81,7 +81,7 @@ src/
     ├── ui/                        # Icon, Button, Toast, Modal
     ├── dashboard/                 # Dashboard, ResumeCard
     ├── editor/
-    │   ├── Editor.tsx             # 3-column editor shell
+    │   ├── Editor.tsx             # 3-column editor
     │   ├── SidebarNav.tsx
     │   └── sections/              # 8 section form components
     ├── preview/
